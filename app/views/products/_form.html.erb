@@ -1,0 +1,37 @@
+<%= form_with(model: product, class: "space-y-4") do |form| %>
+  <div>
+    <%= form.label :name, "Nombre del Producto", class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= form.text_field :name, class: "w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2" %>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <%= form.label :sku, "SKU (Código)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= form.text_field :sku, class: "w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2" %>
+    </div>
+    <div>
+      <%= form.label :category_id, "Categoría", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= form.collection_select :category_id, Category.all, :id, :name, { prompt: "Selecciona una categoría" }, class: "w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2" %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-4">
+    <div>
+      <%= form.label :price, "Precio ($)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= form.number_field :price, step: "0.01", class: "w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2" %>
+    </div>
+    <div>
+      <%= form.label :stock, "Stock Inicial", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= form.number_field :stock, class: "w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2" %>
+    </div>
+    <div>
+      <%= form.label :low_stock_threshold, "Alerta Stock Bajo", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= form.number_field :low_stock_threshold, value: 5, class: "w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2" %>
+    </div>
+  </div>
+
+  <div class="flex justify-end space-x-3 pt-4">
+    <%= link_to "Cancelar", products_path, class: "bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50" %>
+    <%= form.submit "Guardar Producto", class: "bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 shadow-sm cursor-pointer" %>
+  </div>
+<% end %>
