@@ -3,6 +3,10 @@ class ProductsController < ApplicationController
 
   def index
     @products = Product.includes(:category).order(created_at: :desc)
+    @products = @products.where("name ILIKE ? OR sku ILIKE ?", "%#{params[:query]}%", "%#{params[:query]}%") if params[:query].present?
+    @products = @products.where(category_id: params[:category_id]) if params[:category_id].present?
+    
+    @categories = Category.order(:name)
   end
 
   def show
@@ -59,6 +63,6 @@ class ProductsController < ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:name, :sku, :price, :stock, :low_stock_threshold, :category_id)
+    params.require(:product).permit(:name, :sku, :price, :stock, :low_stock_threshold, :category_id, :description)
   end
 end
