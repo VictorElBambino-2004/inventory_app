@@ -1,0 +1,69 @@
+<div class="space-y-6">
+  <!-- Cabecera -->
+  <div class="flex justify-between items-center bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800">📊 Reporte General de Inventario</h2>
+      <p class="text-sm text-gray-500 mt-1">Resumen detallado del estado actual de tu stock y productos.</p>
+    </div>
+    <div class="flex space-x-3">
+      <%= link_to "📥 Exportar Excel (.xlsx)", report_products_path(format: :xlsx), class: "bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 shadow" %>
+      <%= link_to "← Volver al Inventario", products_path, class: "bg-gray-100 text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-200" %>
+    </div>
+  </div>
+
+  <!-- Tarjetas de Estadísticas Clave -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+      <p class="text-xs font-semibold text-gray-500 uppercase">Total de Productos</p>
+      <p class="text-2xl font-bold text-gray-900 mt-1"><%= @total_products %></p>
+    </div>
+    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+      <p class="text-xs font-semibold text-gray-500 uppercase">Productos Activos</p>
+      <p class="text-2xl font-bold text-green-600 mt-1"><%= @active_products %></p>
+    </div>
+    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+      <p class="text-xs font-semibold text-gray-500 uppercase">Productos con Stock Bajo</p>
+      <p class="text-2xl font-bold text-red-600 mt-1"><%= @low_stock_products.count %></p>
+    </div>
+    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+      <p class="text-xs font-semibold text-gray-500 uppercase">Valor Total del Inventario</p>
+      <p class="text-2xl font-bold text-indigo-600 mt-1">$<%= number_with_precision(@total_inventory_value, precision: 2) %></p>
+    </div>
+  </div>
+
+  <!-- Alerta de Stock Bajo -->
+  <% if @low_stock_products.any? %>
+    <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-lg shadow-sm">
+      <h3 class="text-sm font-bold text-red-800 uppercase tracking-wide">⚠️ Atención: Productos con Stock Bajo o Crítico</h3>
+      <ul class="mt-2 divide-y divide-red-200">
+        <% @low_stock_products.each do |product| %>
+          <li class="py-2 flex justify-between items-center text-sm text-red-700">
+            <span><strong><%= product.name %></strong> (SKU: <%= product.sku %>)</span>
+            <span class="bg-red-100 px-2.5 py-0.5 rounded font-bold text-xs">Stock actual: <%= product.stock %> (Umbral: <%= product.low_stock_threshold %>)</span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Resumen por Categorías -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
+    <h3 class="text-lg font-bold text-gray-800 mb-4">Distribución por Categorías</h3>
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoría</th>
+          <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Cantidad de Productos</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% @categories_summary.each do |cat| %>
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= cat.name %></td>
+            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-700 font-bold"><%= cat.products_count %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

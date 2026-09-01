@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Inventory App</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-50 text-gray-900 font-sans antialiased min-h-screen">
+    <!-- Navbar global -->
+    <nav class="bg-indigo-600 text-white shadow-md">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+        <h1 class="text-xl font-bold tracking-wide">
+          <%= link_to "📦 Inventory App", root_path, class: "hover:text-indigo-200" %>
+        </h1>
+        <div class="space-x-4 flex items-center">
+          <%= link_to "Ver Productos", products_path, class: "hover:text-indigo-200" %>
+          <%= link_to "📊 Reportes", report_products_path, class: "hover:text-indigo-200 font-medium" %>
+          <%= link_to "+ Nuevo Producto", new_product_path, class: "bg-white text-indigo-600 px-3 py-1.5 rounded-md font-medium shadow hover:bg-indigo-50" %>
+          <%= link_to "+ Nueva Categoría", new_category_path, class: "bg-indigo-700 px-3 py-1.5 rounded-md font-medium hover:bg-indigo-800" %>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Alertas Flash -->
+    <% if notice.present? %>
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: '<%= j notice %>',
+            timer: 2500,
+            showConfirmButton: false
+          });
+        });
+      </script>
+    <% end %>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+      <%= yield %>
+    </main>
+  </body>
+</html>
